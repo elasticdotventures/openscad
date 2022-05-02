@@ -57,16 +57,13 @@ void Animate::createActionAndPrepareButton(const QIcon &icon, QString descriptio
 }
 
 void Animate::initVCR(){
-  QString suffix("");
-  if(!isLightTheme()){
-    suffix = QString("-white");
-  }
-  static QIcon startIcon    = QIcon(":/icons/svg-default/vcr-control-start" + suffix + ".svg");
-  static QIcon stepBackIcon = QIcon(":/icons/svg-default/vcr-control-step-back" + suffix + ".svg");
-  static QIcon playIcon     = QIcon(":/icons/svg-default/vcr-control-play" + suffix + ".svg");
-  static QIcon pauseIcon    = QIcon(":/icons/svg-default/vcr-control-pause" + suffix + ".svg");
-  static QIcon stepFwrdIcon = QIcon(":/icons/svg-default/vcr-control-step-forward" + suffix + ".svg");
-  static QIcon endIcon      = QIcon(":/icons/svg-default/vcr-control-end" + suffix + ".svg");
+  const static QString suffix = isLightTheme() ? QString::fromStdString("") : QString::fromStdString("-white");
+  const static QIcon startIcon    = QIcon(":/icons/svg-default/vcr-control-start" + suffix + ".svg");
+  const static QIcon stepBackIcon = QIcon(":/icons/svg-default/vcr-control-step-back" + suffix + ".svg");
+  const static QIcon playIcon     = QIcon(":/icons/svg-default/vcr-control-play" + suffix + ".svg");
+  const static QIcon pauseIcon    = QIcon(":/icons/svg-default/vcr-control-pause" + suffix + ".svg");
+  const static QIcon stepFwrdIcon = QIcon(":/icons/svg-default/vcr-control-step-forward" + suffix + ".svg");
+  const static QIcon endIcon      = QIcon(":/icons/svg-default/vcr-control-end" + suffix + ".svg");
 
   createActionAndPrepareButton(
     startIcon, _("Move to beginning (first frame)"),
@@ -228,24 +225,20 @@ void Animate::on_pauseButton_pressed()
 
 void Animate::updatePauseButtonIcon()
 {
-  static QIcon runDark(":/icons/svg-default/animate.svg");
-  static QIcon runLight(":/icons/svg-default/animate-white.svg");
-
-  static QIcon pauseDark(":/icons/svg-default/animate_pause.svg");
-  static QIcon pauseLight(":/icons/svg-default/animate_pause-white.svg");
-
-  static QIcon disabledDark(":/icons/svg-default/animate_disabled.svg");
-  static QIcon disabledLight(":/icons/svg-default/animate_disabled-white.svg");
+  static const QString suffix = isLightTheme() ? QString::fromStdString("") : QString::fromStdString("-white");
+  static const QIcon run(":/icons/svg-default/animate" + suffix + ".svg");
+  static const QIcon pause(":/icons/svg-default/animate_pause" + suffix + ".svg");
+  static const QIcon disabled(":/icons/svg-default/animate_disabled" + suffix + ".svg");
 
   if (animate_timer->isActive()) {
-    pauseButton->setIcon( this->isLightTheme() ? pauseDark : pauseLight );
+    pauseButton->setIcon(pause);
     pauseButton->setToolTip( _("press to pause animation") );
   } else {
     if( this->fps_ok && this->steps_ok ){
-      pauseButton->setIcon( this->isLightTheme() ? runDark : runLight );
+      pauseButton->setIcon(run);
       pauseButton->setToolTip( _("press to start animation") );
     } else {
-      pauseButton->setIcon( this->isLightTheme() ? disabledDark : disabledLight );
+      pauseButton->setIcon(disabled);
       pauseButton->setToolTip( _("incorrect values") );
     }
   }
